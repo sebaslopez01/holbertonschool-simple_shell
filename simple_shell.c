@@ -25,7 +25,7 @@ int main(void)
 		printf("#cisfun$ ");
 		readed_bytes = getline(&buffer, &bufsize, stdin);
 		if (readed_bytes == -1)
-			return (print_error("Readed bytes error:"));
+			return (0);
 
 		buffer[readed_bytes - 1] = '\0';
 		argv[0] = buffer;
@@ -33,16 +33,16 @@ int main(void)
 	
 		new_process = fork();
 		if (new_process == EOF)
-			return(print_error("New process error:"));
+			return(print_error("New process error"));
 
 		if (new_process == 0)
 		{
 			if (execve(buffer, argv, NULL) == EOF)
-				return (print_error("Executing program error:"));
+				return (print_error("./shell"));
 		}
 		else
 			wait(&status);
-
-		}
+	}
+	
 	return (0);
 }
