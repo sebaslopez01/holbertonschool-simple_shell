@@ -18,7 +18,8 @@ int main(void)
 	int status;
 	ssize_t readed_bytes;
 	extern char **environ;
-	char *buffer = NULL, *argv[1024], *prompt = "#cisfun$ ", *token = NULL;
+	char *buffer = NULL, *argv[1024], *prompt = "#cisfun$ ", *token = NULL,
+		separator[] = " \n";
 	size_t bufsize, promptsize = 9, i = 0;
 
 	while (1)
@@ -30,13 +31,13 @@ int main(void)
 			break;
 
 		buffer[readed_bytes - 1] = '\0';
-		token = strtok(buffer, " ");
+		token = strtok(buffer, separator);
 		if (token == NULL)
 			break;
 		while (token != NULL)
 		{
 			argv[i++] = token;
-			token = strtok(NULL, " ");
+			token = strtok(NULL, separator);
 		}
 		argv[i] = NULL;
 
