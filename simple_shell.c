@@ -29,9 +29,8 @@ int main(void)
 		if (readed_bytes == EOF)
 			break;
 
-		
+		buffer[readed_bytes - 1] = '\0';
 		token = strtok(buffer, " ");
-
 		argv[0] = token;
 		argv[1] = NULL;
 
