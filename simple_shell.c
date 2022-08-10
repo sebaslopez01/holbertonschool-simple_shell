@@ -18,7 +18,7 @@ int main(void)
 	int status;
 	ssize_t readed_bytes;
 	extern char **environ;
-	char *buffer = NULL, *argv[2], *prompt = "#cisfun$ ";
+	char *buffer = NULL, *argv[2], *prompt = "#cisfun$ ", *token = NULL;
 	size_t bufsize, promptsize = 9;
 
 	while (1)
@@ -29,8 +29,10 @@ int main(void)
 		if (readed_bytes == EOF)
 			break;
 
-		buffer[readed_bytes - 1] = '\0';
-		argv[0] = buffer;
+		
+		token = strtok(buffer, " ");
+
+		argv[0] = token;
 		argv[1] = NULL;
 
 		new_process = fork();
@@ -42,7 +44,7 @@ int main(void)
 
 		if (new_process == 0)
 		{		
-			if (execve(buffer, argv, environ) == EOF)
+			if (execve(token, argv, environ) == EOF)
 			{
 				free(buffer);
 				return (print_error("./shell"));
