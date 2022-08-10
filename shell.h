@@ -10,7 +10,7 @@
 #include <stddef.h>
 
 /* types and structures */
-#define EOF (-1)
+/*#define EOF (-1)*/
 
 /* macros valores constantes */
 
