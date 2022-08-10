@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stddef.h>
+#define EOF (-1)
 
 int print_error(char *str)
 {
@@ -18,34 +19,37 @@ int main(void)
 	int status;
 	ssize_t readed_bytes;
 	char *buffer = NULL, *argv[2];
-	size_t bufsize = 1024;
+	size_t bufsize = 0;
 
-	buffer = malloc(sizeof(char) * bufsize);
-	if (!buffer)
-		return (print_error("Buffer error:"));
-
-	printf("#cisfun$ ");
-	readed_bytes = getline(&buffer, &bufsize, stdin);
-	if (readed_bytes == -1)
-		return (print_error("Readed bytes error:"));
-
-	buffer[readed_bytes - 1] = '\0';
-	argv[0] = buffer;
-	argv[1] = NULL;
-	
-	new_process = fork();
-	if (new_process == -1)
-		return (print_error("New process error:"));
-
-	if (new_process == 0)
+	while (1)
 	{
-		if (execve(buffer, argv, NULL) == -1)
-			return (print_error("Executing program error:"));
-	}
-	else
-		wait(&status);
+		printf("#cisfun$ ");
+		readed_bytes = getline(&buffer, &bufsize, stdin);
+		if (readed_bytes == -1)
+			return (print_error("Readed bytes error:"));
 
-	free(buffer);
+		buffer[readed_bytes - 1] = '\0';
+		argv[0] = buffer;
+		argv[1] = NULL;
+	
+		new_process = fork();
+		if (new_process == EOF)
+		{
+			perror("New process error:");
+			return (1);
+		}
+		if (new_process == 0)
+		{
+			if (execve(buffer, argv, NULL) == EOF)
+			{
+				perror("Executing program error:");
+				return (1);
 
+			}
+		}
+		else
+			wait(&status);
+
+		}
 	return (0);
 }
