@@ -1,10 +1,9 @@
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stddef.h>
-#define EOF (-1)
+#include "shell.h"
+
+/**
+ *
+ *
+ */
 
 int print_error(char *str)
 {
@@ -34,18 +33,12 @@ int main(void)
 	
 		new_process = fork();
 		if (new_process == EOF)
-		{
-			perror("New process error:");
-			return (1);
-		}
+			return(print_error("New process error:"));
+
 		if (new_process == 0)
 		{
 			if (execve(buffer, argv, NULL) == EOF)
-			{
-				perror("Executing program error:");
-				return (1);
-
-			}
+				return (print_error("Executing program error:"));
 		}
 		else
 			wait(&status);
