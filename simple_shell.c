@@ -54,9 +54,6 @@ int main(void)
 		}
 		else	
 			wait(&status);
-
-		if (isatty(STDIN_FILENO) == 0)
-			break;
 	}
 
 	free(buffer);
