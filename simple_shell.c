@@ -19,12 +19,6 @@ void split_args(char **tokens, char *str, char *delimeter)
 
 	token = strtok(str, delimeter);
 
-	if (token == NULL)
-	{
-		tokens[i] = NULL;
-		return;
-	}
-
 	while (token != NULL)
 	{
 		tokens[i++] = token;
@@ -99,11 +93,8 @@ int main(void)
 						free(buffer);
 						return (0);
 					}
-					for (j = 0; tokens_args[j] != NULL; j++)
-						argv[k++] = tokens_args[j];
-					argv[k] = NULL;
 
-					if (execve(argv[0], argv, environ) == EOF)
+					if (execve(tokens_args[0], tokens_args, environ) == EOF)
 					{
 						free(buffer);
 						return (print_error("./shell"));
