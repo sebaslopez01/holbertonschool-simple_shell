@@ -1,46 +1,10 @@
 #include "shell.h"
 
 /**
+ * main - program that executes command line operations
  *
- *
+ * Return: 0 Success
  */
-
-int print_error(char *str)
-{
-	perror(str);
-	
-	return (1);
-}
-
-void split_args(char **tokens, char *str, char *delimeter)
-{
-	char *token = NULL;
-	size_t i = 0;
-
-	token = strtok(str, delimeter);
-
-	while (token != NULL)
-	{
-		tokens[i++] = token;
-
-		token = strtok(NULL, delimeter);
-	}
-
-	tokens[i] = NULL;
-}
-
-int contains_char(char *str, char c)
-{
-	size_t i;
-
-	for (i = 0; str[i] != '\0'; i++)
-	{
-		if (str[i] == c)
-			return (1);
-	}
-
-	return (0);
-}
 
 int main(void)
 {
