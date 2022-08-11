@@ -1,0 +1,27 @@
+.\" HSH(1) 
+.\" HSH(1)
+.TH man 1 "11 Ago 2022" "1.0"
+.SH NAME
+hsh \- command interpreter (shell)
+.SH SYNOPSIS
+hsh [-o option_name] [+o option_name] [command_file [argument ...]]
+.SH DESCRIPTION
+This program simulates a command interpreter based in Unix and GNU/LINUX with its basic commands.
+through a terminal emulator and some executable instructions(shell scripts) the user can interact with this \fBsimple_shell.\fR
+This simple_shell is not supossed to be an exact imitation of the original Unix Shell. This doesn't cover all of the instructions the original does.
+.SH BUILTIN COMMANDS
+Builtin commands that replicate the original UNIX shell:
+.PP
+.B - exit
+Terminates the program.
+.sp
+.B - env
+Prints the enviromental variables and their values to standard output.
+.sp
+.B - help
+Retrieve informational text on how use builtin
+.SH BUGS
+No known bugs.
+.SH AUTHORS
+Sebastian Lopez
+Rodrigo Duque
