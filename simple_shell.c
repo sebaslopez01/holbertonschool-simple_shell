@@ -14,7 +14,7 @@ int main(void)
 	extern char **environ;
 	char *buffer = NULL, *argv[1024], *prompt = "#cisfun$ ";
 	char *tokens[1024], *tokens_args[1024];
-	size_t i, j, bufsize, promptsize = 9, k = 0;
+	size_t i, bufsize, promptsize = 9;
 
 	while (1)
 	{	
