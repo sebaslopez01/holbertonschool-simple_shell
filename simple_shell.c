@@ -9,7 +9,7 @@
 int main(void)
 {
 	pid_t new_process;
-	int status = 0;
+	int status = 0, exit_status = 0;
 	ssize_t readed_bytes;
 	extern char **environ;
 	char *buffer = NULL, *prompt = "#cisfun$ ", *tokens[1024];
@@ -28,7 +28,7 @@ int main(void)
 		if (_strcmp(buffer, "exit") == 0)
 		{
 			free(buffer);
-			exit(status);
+			exit(exit_status);
 		}
 
 		split_args(tokens, buffer, " \t\r\n");
@@ -57,6 +57,9 @@ int main(void)
 		}
 		else
 			wait(&status);
+
+		if (WIFEXITED(status))
+			exit_status = WEXITSTATUS(status);
 	}
 
 	free(buffer);
