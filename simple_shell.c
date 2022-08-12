@@ -9,7 +9,7 @@
 int main(void)
 {
 	pid_t new_process;
-	int status;
+	int status = 0;
 	ssize_t readed_bytes;
 	extern char **environ;
 	char *buffer = NULL, *prompt = "#cisfun$ ", *tokens[1024];
