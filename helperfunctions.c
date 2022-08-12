@@ -58,3 +58,23 @@ int contains_char(char *str, char c)
 
 	return (0);
 }
+
+/**
+ * _strcmp - Compares two strings
+ * @s1: First string
+ * @s2: Second string
+ *
+ * Return: Number difference between the two strings
+ */
+int _strcmp(char *s1, char *s2)
+{
+	while (*s1 == *s2 && (*s1 != '\0' && *s2 != '\0'))
+	{
+		s1++;
+		s2++;
+	}
+
+	if (*s1 == *s2)
+		return (0);
+	return (*s1 - *s2);
+}

@@ -12,9 +12,8 @@ int main(void)
 	int status;
 	ssize_t readed_bytes;
 	extern char **environ;
-	char *buffer = NULL, *argv[1024], *prompt = "#cisfun$ ";
-	char *tokens[1024], *tokens_args[1024];
-	size_t i, bufsize, promptsize = 9;
+	char *buffer = NULL, *prompt = "#cisfun$ ", *tokens[1024];
+	size_t i, bufsize = 0, promptsize = 9;
 
 	while (1)
 	{	
@@ -26,6 +25,17 @@ int main(void)
 			break;
 		buffer[readed_bytes - 1] = '\0';
 
+		if (_strcmp(buffer, "exit") == 0)
+		{
+			free(buffer);
+			exit(status);
+		}
+
+		split_args(tokens, buffer, " \t\r\n");
+
+		if (tokens[0] == NULL)
+			break;
+
 		new_process = fork();
 		if (new_process == EOF)
 		{
@@ -34,43 +44,18 @@ int main(void)
 		}
 
 		if (new_process == 0)
-		{	
-			split_args(tokens, buffer, "\n");
-
-			for (i = 0; tokens[i] != NULL; i++)
+		{
+			if (execve(tokens[0], tokens, environ) == EOF)
 			{
-				if (!contains_char(tokens[i], ' '))
-				{
-					argv[0] = tokens[i];
-					argv[1] = NULL;
-					if (execve(argv[0], argv, environ) == EOF)
-					{
-						free(buffer);
-						return (print_error("./shell"));
-					}
-				}
-				else
-				{
-					split_args(tokens_args, tokens[i], " ");
-					if (tokens_args[0] == NULL)
-					{
-						free(buffer);
-						return (0);
-					}
-
-					if (execve(tokens_args[0], tokens_args, environ) == EOF)
-					{
-						free(buffer);
-						return (print_error("./shell"));
-					}
-				}
+				free(buffer);
+				return (print_error("./shell"));
 			}
-			
+						
 			free(buffer);
 			buffer = NULL;
 			bufsize = 0;
 		}
-		else	
+		else
 			wait(&status);
 	}
 

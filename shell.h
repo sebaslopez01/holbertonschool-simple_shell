@@ -17,6 +17,7 @@
 int print_error(char *str);
 void split_args(char **tokens, char *str, char *delimeter);
 int contains_char(char *str, char c);
+int _strcmp(char *s1, char *s2)
 
 /* macros functions */
 
