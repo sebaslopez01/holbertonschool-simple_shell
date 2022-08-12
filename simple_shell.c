@@ -13,7 +13,7 @@ int main(void)
 	ssize_t readed_bytes;
 	extern char **environ;
 	char *buffer = NULL, *prompt = "#cisfun$ ", *tokens[1024];
-	size_t i, bufsize = 0, promptsize = 9;
+	size_t bufsize = 0, promptsize = 9;
 
 	while (1)
 	{	
