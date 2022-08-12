@@ -5,14 +5,13 @@
  * @str: string of message
  * Return: 1 error value
  */
-
-
 int print_error(char *str)
 {
 	perror(str);
 
 	return (1);
 }
+
 
 /**
  * split_args - function that splits the supplied arguments into a string
@@ -21,7 +20,6 @@ int print_error(char *str)
  * @delimeter: tipe of delimeter
  * Return: void
  */
-
 void split_args(char **tokens, char *str, char *delimeter)
 {
 	char *token = NULL;
@@ -40,24 +38,21 @@ void split_args(char **tokens, char *str, char *delimeter)
 }
 
 /**
- * contains_char - function that searches for a specific character in a string
- * @str: string in which the character is searched
- * @c: character to search
- * Return: 0 Success
+ * _strlen - Gets the length of a string
+ * @str: String to get the length from
+ *
+ * Return: Length of the string
  */
-
-int contains_char(char *str, char c)
+size_t _strlen(const char *str)
 {
-	size_t i;
+	size_t len = 0;
 
-	for (i = 0; str[i] != '\0'; i++)
-	{
-		if (str[i] == c)
-			return (1);
-	}
+	while (str[len] != '\0')
+		len++;
 
-	return (0);
+	return (len);
 }
+
 
 /**
  * _strcmp - Compares two strings
@@ -77,4 +72,33 @@ int _strcmp(char *s1, char *s2)
 	if (*s1 == *s2)
 		return (0);
 	return (*s1 - *s2);
+}
+
+
+/**
+ * _getenv - Gets the value of the environment variable name
+ * @name: Environment variable to get the value from
+ *
+ * Return: The value of the environment name or NULL if couldn't find it
+ */
+char *_getenv(const char *name)
+{
+	extern char **environ;
+	const char *delimeter = "=";
+	char *token = NULL;
+	size_t i;
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		token = strtok(environ[i], delimeter);
+
+		if (strcmp(name, token) == 0)
+		{
+			token = strtok(NULL, delimeter);
+
+			return (token);
+		}
+	}
+
+	return (NULL);
 }
