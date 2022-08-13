@@ -61,7 +61,7 @@ size_t _strlen(const char *str)
  *
  * Return: Number difference between the two strings
  */
-int _strcmp(char *s1, char *s2)
+int _strcmp(const char *s1, const char *s2)
 {
 	while (*s1 == *s2 && (*s1 != '\0' && *s2 != '\0'))
 	{
@@ -69,8 +69,6 @@ int _strcmp(char *s1, char *s2)
 		s2++;
 	}
 
-	if (*s1 == *s2)
-		return (0);
 	return (*s1 - *s2);
 }
 
@@ -84,20 +82,24 @@ int _strcmp(char *s1, char *s2)
 char *_getenv(const char *name)
 {
 	extern char **environ;
-	const char *delimeter = "=";
-	char *token = NULL;
-	size_t i;
+	size_t i, j;
+	int is_different = 0;
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		token = strtok(environ[i], delimeter);
-
-		if (strcmp(name, token) == 0)
+		for (j = 0; environ[i][j] != '='; j++)
 		{
-			token = strtok(NULL, delimeter);
-
-			return (token);
+			if (name[j] != environ[i][j])
+			{
+				is_different = 1;
+				break;
+			}
 		}
+
+		if (!is_different)
+			return (*(environ + i) + j + 1);
+
+		is_different = 0;
 	}
 
 	return (NULL);

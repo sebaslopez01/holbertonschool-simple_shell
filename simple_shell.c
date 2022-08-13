@@ -3,37 +3,42 @@
 
 char *filter_cmd(char *cmd)
 {
-	struct stat st;
-	const char *delimeter = ":";
-	char *token = NULL, *path_cmd = NULL, *path_data = _getenv("PATH"); 
-	size_t i, j;
-	
+	char *token = NULL, *p_cmd = NULL, *p_data = _getenv("PATH"), *p_copy = NULL;
+	size_t i, j, cmd_len = _strlen(cmd);
 
-	if (stat(cmd, &st) == 0)
-		return (cmd);
+	p_cmd = malloc(sizeof(char) * cmd_len + 1);
+	if (!p_cmd)
+		return (NULL);
+	p_cmd = _strcpy(p_cmd, cmd);
+	if (access(p_cmd, F_OK) == 0)
+		return (p_cmd);
+	free(p_cmd);
 
-	token = strtok(path_data, delimeter);
+	p_copy = malloc(sizeof(char) * _strlen(p_data) + 1);
+	if (!p_copy)
+		return (NULL);
+	p_copy = _strcpy(p_copy, p_data);
+	token = strtok(p_copy, ":");
 	while (token != NULL)
 	{
-		path_cmd = malloc(sizeof(char) * _strlen(token) + _strlen(cmd) + 2);
-		if (!path_cmd)
+		p_cmd = malloc(sizeof(char) * _strlen(token) + cmd_len + 2);
+		if (!p_cmd)
 			return (NULL);
-		
 		for (i = 0; token[i] != '\0'; i++)
-			path_cmd[i] = token[i];
-		path_cmd[i++] = '/';
+			p_cmd[i] = token[i];
+		p_cmd[i++] = '/';
 		for (j = 0; cmd[j] != '\0'; j++)
-			path_cmd[i++] = cmd[j];
-		path_cmd[i] = '\0';
-		
-		if (stat(path_cmd, &st) == 0)
-			return (path_cmd);
-
-		free(path_cmd);
-		path_cmd = NULL;
-		token = strtok(NULL, delimeter);
+			p_cmd[i++] = cmd[j];
+		p_cmd[i] = '\0';
+		if (access(p_cmd, F_OK) == 0)
+		{
+			free(p_copy);
+			return (p_cmd);
+		}
+		token = strtok(NULL, ":");
+		free(p_cmd);
 	}
-
+	free(p_copy);
 	return (NULL);
 }
 
@@ -56,13 +61,11 @@ int main(void)
 	{	
 		if (isatty(STDIN_FILENO) == 1)
 			write(STDOUT_FILENO, prompt, promptsize);
-
 		readed_bytes = getline(&buffer, &bufsize, stdin);
 		if (readed_bytes == EOF)
 			break;
-		buffer[readed_bytes - 1] = '\0';
-
-		if (_strcmp(buffer, "exit") == 0)
+		
+		if (_strcmp(buffer, "exit\n") == 0)
 		{
 			free(buffer);
 			exit(exit_status);
@@ -78,33 +81,31 @@ int main(void)
 			perror("./hsh");
 			continue;
 		}
-
+		
 		new_process = fork();
 		if (new_process == EOF)
 		{
+			free(tokens[0]);
 			free(buffer);
 			return (print_error("New process error"));
 		}
 
 		if (new_process == 0)
 		{
-			if (execve(tokens[0], tokens, environ) == EOF)
-			{
-				free(buffer);
-				return (print_error("./shell"));
-			}
-						
+			execve(tokens[0], tokens, environ);
+
+			free(tokens[0]);
 			free(buffer);
-			buffer = NULL;
-			bufsize = 0;
+			return (print_error("./shell"));
 		}
-		else
+		else	
 			wait(&status);
 
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
 	}
-
+	
+	free(tokens[0]);
 	free(buffer);
 
 	return (0);

@@ -18,10 +18,10 @@
 /* prototypes */
 int print_error(char *str);
 void split_args(char **tokens, char *str, char *delimeter);
-int contains_char(char *str, char c);
 size_t _strlen(const char *str);
-int _strcmp(char *s1, char *s2);
+int _strcmp(const char *s1, const char *s2);
 char *_getenv(const char *name);
+char *_strcpy(char *dest, const char *src);
 
 /* macros functions */
 
