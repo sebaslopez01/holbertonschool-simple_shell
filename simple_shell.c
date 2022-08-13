@@ -64,13 +64,14 @@ int main(void)
 		readed_bytes = getline(&buffer, &bufsize, stdin);
 		if (readed_bytes == EOF)
 			break;
-		
+		if (*buffer == '\n')
+			continue;
 		if (_strcmp(buffer, "exit\n") == 0)
 		{
 			free(buffer);
 			exit(exit_status);
 		}
-		
+
 		split_args(tokens, buffer, " \t\r\n");
 		if (tokens[0] == NULL)
 			break;
@@ -81,7 +82,7 @@ int main(void)
 			perror("./hsh");
 			continue;
 		}
-		
+
 		new_process = fork();
 		if (new_process == EOF)
 		{
@@ -100,13 +101,13 @@ int main(void)
 		}
 		else	
 			wait(&status);
+		free(tokens[0]);
 
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
 	}
-	
-	free(tokens[0]);
-	free(buffer);
 
+	free(buffer);
+	
 	return (0);
 }
