@@ -13,6 +13,8 @@ char *filter_cmd(char *cmd)
 	if (access(p_cmd, F_OK) == 0)
 		return (p_cmd);
 	free(p_cmd);
+	if (p_data == NULL)
+		return (NULL);
 
 	p_copy = malloc(sizeof(char) * _strlen(p_data) + 1);
 	if (!p_copy)
