@@ -80,9 +80,9 @@ int main(void)
 		if (tokens[0] == NULL)
 		{
 			print_not_found_error(cmd, &count_err);
-
 			if (!isatty(STDIN_FILENO))
 				return (127);
+			free(buffer);
 			continue;
 		}
 
