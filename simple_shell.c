@@ -59,7 +59,7 @@ int main(void)
 
 	while (1)
 	{	
-		if (isatty(STDIN_FILENO) == 1)
+		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, prompt, promptsize);
 		readed_bytes = getline(&buffer, &bufsize, stdin);
 		if (readed_bytes == EOF)
@@ -81,8 +81,10 @@ int main(void)
 		{
 			print_not_found_error(cmd, &count_err);
 			if (!isatty(STDIN_FILENO))
-				return (127);
-			free(buffer);
+			{
+				free(buffer);
+				exit(127);
+			}
 			continue;
 		}
 
