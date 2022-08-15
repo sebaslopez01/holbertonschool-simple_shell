@@ -43,34 +43,6 @@ char *filter_cmd(char *cmd)
 }
 
 
-void print_not_found_error(char *cmd, size_t *count_err)
-{
-	char *num = NULL, *error_msg = NULL;
-	size_t len;
-	
-	num = malloc(sizeof(char) * count_digits(*count_err) + 1);
-	if (!num)
-		return;
-	num = itoa(*count_err, num);
-	len = _strlen(cmd) + _strlen(num) + 21;
-
-	error_msg = malloc(sizeof(char) * len + 1);
-	if (!error_msg)
-		return;
-
-	_strcpy(error_msg, "./hsh: ");
-	_strcat(error_msg, num);
-	_strcat(error_msg, ": ");
-	_strcat(error_msg, cmd);
-	_strcat(error_msg, ": not found\n");
-
-	write(STDERR_FILENO, error_msg, len);
-	
-	free(num);
-	free(error_msg);
-}
-
-
 /**
  * main - program that executes command line operations
  *
@@ -108,6 +80,9 @@ int main(void)
 		if (tokens[0] == NULL)
 		{
 			print_not_found_error(cmd, &count_err);
+
+			if (!isatty(STDIN_FILENO))
+				return (127);
 			continue;
 		}
 

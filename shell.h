@@ -26,6 +26,7 @@ char *_strcat(char *dest, const char *src);
 void reverse_string(char *str);
 char *itoa(int num, char *buffer);
 size_t count_digits(int num);
+void print_not_found_error(char *cmd, size_t *count_err);
 
 /* macros functions */
 
