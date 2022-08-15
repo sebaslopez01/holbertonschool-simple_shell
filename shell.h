@@ -22,6 +22,10 @@ size_t _strlen(const char *str);
 int _strcmp(const char *s1, const char *s2);
 char *_getenv(const char *name);
 char *_strcpy(char *dest, const char *src);
+char *_strcat(char *dest, const char *src);
+void reverse_string(char *str);
+char *itoa(int num, char *buffer);
+size_t count_digits(int num);
 
 /* macros functions */
 

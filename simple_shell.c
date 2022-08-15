@@ -15,7 +15,7 @@ char *filter_cmd(char *cmd)
 	if (access(p_cmd, F_OK) == 0)
 		return (p_cmd);
 	free(p_cmd);
-
+		
 	p_copy = malloc(sizeof(char) * _strlen(p_data) + 1);
 	if (!p_copy)
 		return (NULL);
@@ -26,12 +26,10 @@ char *filter_cmd(char *cmd)
 		p_cmd = malloc(sizeof(char) * _strlen(token) + cmd_len + 2);
 		if (!p_cmd)
 			return (NULL);
-		for (i = 0; token[i] != '\0'; i++)
-			p_cmd[i] = token[i];
-		p_cmd[i++] = '/';
-		for (j = 0; cmd[j] != '\0'; j++)
-			p_cmd[i++] = cmd[j];
-		p_cmd[i] = '\0';
+		_strcpy(p_cmd, token);
+		_strcat(p_cmd, "/");
+		_strcat(p_cmd, cmd);
+
 		if (access(p_cmd, F_OK) == 0)
 		{
 			free(p_copy);
@@ -42,6 +40,34 @@ char *filter_cmd(char *cmd)
 	}
 	free(p_copy);
 	return (NULL);
+}
+
+
+void print_not_found_error(char *cmd, size_t *count_err)
+{
+	char *num = NULL, *error_msg = NULL;
+	size_t len;
+	
+	num = malloc(sizeof(char) * count_digits(*count_err) + 1);
+	if (!num)
+		return;
+	num = itoa(*count_err, num);
+	len = _strlen(cmd) + _strlen(num) + 21;
+
+	error_msg = malloc(sizeof(char) * len + 1);
+	if (!error_msg)
+		return;
+
+	_strcpy(error_msg, "./hsh: ");
+	_strcat(error_msg, num);
+	_strcat(error_msg, ": ");
+	_strcat(error_msg, cmd);
+	_strcat(error_msg, ": not found\n");
+
+	write(STDERR_FILENO, error_msg, len);
+	
+	free(num);
+	free(error_msg);
 }
 
 
@@ -56,8 +82,8 @@ int main(void)
 	int status = 0, exit_status = 0;
 	ssize_t readed_bytes;
 	extern char **environ;
-	char *buffer = NULL, *prompt = "#cisfun$ ", *tokens[1024];
-	size_t bufsize = 0, promptsize = 9;
+	char *buffer = NULL, *prompt = "#cisfun$ ", *tokens[1024], *cmd = NULL;
+	size_t bufsize = 0, promptsize = 9, count_err = 1;
 
 	while (1)
 	{	
@@ -77,11 +103,11 @@ int main(void)
 		split_args(tokens, buffer, " \t\r\n");
 		if (tokens[0] == NULL)
 			break;
-
-		tokens[0] = filter_cmd(tokens[0]);
+		cmd = tokens[0];
+		tokens[0] = filter_cmd(cmd);
 		if (tokens[0] == NULL)
 		{
-			perror("./hsh");
+			print_not_found_error(cmd, &count_err);
 			continue;
 		}
 

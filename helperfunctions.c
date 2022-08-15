@@ -37,41 +37,6 @@ void split_args(char **tokens, char *str, char *delimeter)
 	tokens[i] = NULL;
 }
 
-/**
- * _strlen - Gets the length of a string
- * @str: String to get the length from
- *
- * Return: Length of the string
- */
-size_t _strlen(const char *str)
-{
-	size_t len = 0;
-
-	while (str[len] != '\0')
-		len++;
-
-	return (len);
-}
-
-
-/**
- * _strcmp - Compares two strings
- * @s1: First string
- * @s2: Second string
- *
- * Return: Number difference between the two strings
- */
-int _strcmp(const char *s1, const char *s2)
-{
-	while (*s1 == *s2 && (*s1 != '\0' && *s2 != '\0'))
-	{
-		s1++;
-		s2++;
-	}
-
-	return (*s1 - *s2);
-}
-
 
 /**
  * _getenv - Gets the value of the environment variable name
