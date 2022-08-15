@@ -68,3 +68,51 @@ char *_getenv(const char *name)
 
 	return (NULL);
 }
+
+/**
+ * filter_cmd - funtion that filter the command of the PATH
+ * @cmd:  string  of the commands imput
+ * Return:  NULL
+ */
+ 
+
+char *filter_cmd(char *cmd)
+{
+	char *token = NULL, *p_cmd = NULL, *p_data = _getenv("PATH"), *p_copy = NULL;
+	size_t cmd_len = _strlen(cmd);
+	
+	if (p_data == NULL)
+		return (NULL);
+	p_cmd = malloc(sizeof(char) * cmd_len + 1);
+	if (!p_cmd)
+		return (NULL);
+	p_cmd = _strcpy(p_cmd, cmd);
+	if (access(p_cmd, F_OK) == 0)
+		return (p_cmd);
+	free(p_cmd);
+		
+	p_copy = malloc(sizeof(char) * _strlen(p_data) + 1);
+	if (!p_copy)
+		return (NULL);
+	p_copy = _strcpy(p_copy, p_data);
+	token = strtok(p_copy, ":");
+	while (token != NULL)
+	{
+		p_cmd = malloc(sizeof(char) * _strlen(token) + cmd_len + 2);
+		if (!p_cmd)
+			return (NULL);
+		_strcpy(p_cmd, token);
+		_strcat(p_cmd, "/");
+		_strcat(p_cmd, cmd);
+
+		if (access(p_cmd, F_OK) == 0)
+		{
+			free(p_copy);
+			return (p_cmd);
+		}
+		token = strtok(NULL, ":");
+		free(p_cmd);
+	}
+	free(p_copy);
+	return (NULL);
+}
