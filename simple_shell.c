@@ -5,7 +5,9 @@ char *filter_cmd(char *cmd)
 {
 	char *token = NULL, *p_cmd = NULL, *p_data = _getenv("PATH"), *p_copy = NULL;
 	size_t i, j, cmd_len = _strlen(cmd);
-
+	
+	if (p_data == NULL)
+		return (NULL);
 	p_cmd = malloc(sizeof(char) * cmd_len + 1);
 	if (!p_cmd)
 		return (NULL);
@@ -13,8 +15,6 @@ char *filter_cmd(char *cmd)
 	if (access(p_cmd, F_OK) == 0)
 		return (p_cmd);
 	free(p_cmd);
-	if (p_data == NULL)
-		return (NULL);
 
 	p_copy = malloc(sizeof(char) * _strlen(p_data) + 1);
 	if (!p_copy)

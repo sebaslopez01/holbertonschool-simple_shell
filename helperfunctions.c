@@ -89,13 +89,12 @@ char *_getenv(const char *name)
 	{
 		for (j = 0; environ[i][j] != '='; j++)
 		{
-			if (name[j] != environ[i][j])
+			if (name[j] != environ[i][j] || name[j] == '\0')
 			{
 				is_different = 1;
 				break;
 			}
 		}
-
 		if (!is_different)
 			return (*(environ + i) + j + 1);
 
