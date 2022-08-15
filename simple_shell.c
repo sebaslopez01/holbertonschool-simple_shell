@@ -4,7 +4,7 @@
 char *filter_cmd(char *cmd)
 {
 	char *token = NULL, *p_cmd = NULL, *p_data = _getenv("PATH"), *p_copy = NULL;
-	size_t i, j, cmd_len = _strlen(cmd);
+	size_t cmd_len = _strlen(cmd);
 	
 	if (p_data == NULL)
 		return (NULL);
