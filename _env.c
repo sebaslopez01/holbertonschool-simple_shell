@@ -8,11 +8,10 @@
 
 void print_env(void)
 {
-	size_t i = 0;
 	extern char **environ;
+	size_t i;
 
-
-	for (i = 0; environ[i]; i++)
+	for (i = 0; environ[i] != NULL; i++)
 	{
 		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
 		write(STDOUT_FILENO, "\n", 1);

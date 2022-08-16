@@ -24,12 +24,12 @@ int main(void)
 			break;
 		if (*buffer == '\n')
 			continue;
-		if (_strcmp(buffer, "exit\n") == 0)
+		if (!_strcmp(buffer, "exit\n"))
 		{
 			free(buffer);
 			exit(exit_status);
 		}
-		if (env_check(buffer) == 1)
+		if (!_strcmp(buffer, "env\n"))
 		{
 			print_env();
 			continue;
