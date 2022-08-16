@@ -13,7 +13,6 @@ int main(void)
 	ssize_t readed_bytes;
 	extern char **environ;
 	char *buffer = NULL, *prompt = "#cisfun$ ", *tokens[1024], *cmd = NULL;
-	char *_env = "env";
 	size_t bufsize = 0, promptsize = 9, count_err = 1;
 
 	while (1)
@@ -30,7 +29,11 @@ int main(void)
 			free(buffer);
 			exit(exit_status);
 		}
-
+		if (env_check(buffer) == 1)
+		{
+			print_env();
+			continue;
+		}
 		split_args(tokens, buffer, " \t\r\n");
 		if (tokens[0] == NULL)
 			break;
@@ -57,8 +60,6 @@ int main(void)
 
 		if (new_process == 0)
 		{
-			if (_strcmp(tokens[0], _env))
-				print_env();
 			execve(tokens[0], tokens, environ);
 
 			free(tokens[0]);

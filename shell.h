@@ -29,6 +29,7 @@ size_t count_digits(int num);
 void print_not_found_error(char *cmd, size_t *count_err);
 char *filter_cmd(char *cmd);
 void print_env(void);
+int env_check(char *buffer);
 
 /* macros functions */
 
