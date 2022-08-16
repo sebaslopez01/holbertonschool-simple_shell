@@ -56,6 +56,8 @@ int main(void)
 
 		if (new_process == 0)
 		{
+			if (tokens[0] == "env")
+				print_env();
 			execve(tokens[0], tokens, environ);
 
 			free(tokens[0]);
