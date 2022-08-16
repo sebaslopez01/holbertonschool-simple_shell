@@ -1,16 +1,6 @@
 #include "shell.h"
 
-/**
- * print_error - print a system error message
- * @str: string of message
- * Return: 1 error value
- */
-int print_error(char *str)
-{
-	perror(str);
 
-	return (1);
-}
 
 
 /**
@@ -69,13 +59,31 @@ char *_getenv(const char *name)
 	return (NULL);
 }
 
+
+/**
+ * print_env - function that prints the current environment
+ * 
+ * Return: void
+ */
+
+void print_env(void)
+{
+	extern char **environ;
+	size_t i;
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
+		write(STDOUT_FILENO, "\n", 1);
+	}
+}
+
+
 /**
  * filter_cmd - funtion that filter the command of the PATH
  * @cmd:  string  of the commands imput
  * Return:  NULL
  */
- 
-
 char *filter_cmd(char *cmd)
 {
 	char *token = NULL, *p_cmd = NULL, *p_data = _getenv("PATH"), *p_copy = NULL;

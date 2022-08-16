@@ -2,6 +2,19 @@
 
 
 /**
+ * print_error - print a system error message
+ * @str: string of message
+ * Return: 1 error value
+ */
+int print_error(char *str)
+{
+	perror(str);
+
+	return (1);
+}
+
+
+/**
  * print_not_found_error - Prints an error if a command is not found
  * @cmd: Name of the command to print
  * @count_err: Number of errors to increment
@@ -35,6 +48,3 @@ void print_not_found_error(char *cmd, size_t *count_err)
 	free(num);
 	free(error_msg);
 }
-
-
-
