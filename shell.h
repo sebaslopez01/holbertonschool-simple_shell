@@ -17,18 +17,24 @@
 
 /* prototypes */
 int print_error(char *str);
-void split_args(char **tokens, char *str, char *delimeter);
+size_t count_args(const char *str, const char *delimeter);
+char **split_args(char *str, const char *delimeter);
+void free_tokens(char **tokens);
 size_t _strlen(const char *str);
 int _strcmp(const char *s1, const char *s2);
 char *_getenv(const char *name);
 char *_strcpy(char *dest, const char *src);
 char *_strcat(char *dest, const char *src);
+char *_strdup(const char *str);
 void reverse_string(char *str);
 char *itoa(int num, char *buffer);
 size_t count_digits(int num);
 void print_not_found_error(char *cmd, size_t *count_err);
-char *filter_cmd(char *cmd);
+int filter_cmd(char **cmd);
 void print_env(void);
+void *_realloc(void *ptr, size_t old_size, size_t new_size);
+void *_calloc(size_t nelem, size_t elsize);
+void *_memset(void *s, int c, size_t n);
 
 /* macros functions */
 

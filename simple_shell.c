@@ -12,7 +12,7 @@ int main(void)
 	int status = 0, exit_status = 0;
 	ssize_t readed_bytes;
 	extern char **environ;
-	char *buffer = NULL, *prompt = "#cisfun$ ", *tokens[1024], *cmd = NULL;
+	char *buffer = NULL, *prompt = "#cisfun$ ", **tokens = NULL;
 	size_t bufsize = 0, promptsize = 9, count_err = 1;
 
 	while (1)
@@ -34,16 +34,19 @@ int main(void)
 			print_env();
 			continue;
 		}
-		split_args(tokens, buffer, " \t\r\n");
-		if (tokens[0] == NULL)
-			break;
-		cmd = tokens[0];
-		tokens[0] = filter_cmd(cmd);
-		if (tokens[0] == NULL)
+		tokens = split_args(buffer, " \t\r\n");
+		if (tokens == NULL || tokens[0] == NULL)
 		{
-			print_not_found_error(cmd, &count_err);
+			free(tokens);
+			break;
+		}
+		
+		if (!filter_cmd(&tokens[0]))
+		{
+			print_not_found_error(tokens[0], &count_err);
 			if (!isatty(STDIN_FILENO))
 			{
+				free_tokens(tokens);
 				free(buffer);
 				exit(127);
 			}
@@ -53,7 +56,7 @@ int main(void)
 		new_process = fork();
 		if (new_process == EOF)
 		{
-			free(tokens[0]);
+			free_tokens(tokens);
 			free(buffer);
 			return (print_error("New process error"));
 		}
@@ -62,19 +65,17 @@ int main(void)
 		{
 			execve(tokens[0], tokens, environ);
 
-			free(tokens[0]);
+			free_tokens(tokens);
 			free(buffer);
 			return (print_error("./shell"));
 		}
 		else	
 			wait(&status);
-		free(tokens[0]);
+		free_tokens(tokens);
 
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
 	}
-
 	free(buffer);
-	
 	return (0);
 }

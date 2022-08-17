@@ -1,126 +1,136 @@
 #include "shell.h"
 
 
+/**
+ * free_tokens - Frees space of all tokens and the array itself
+ * @tokens: Tokens to free
+ *
+ * Return void
+ */
+void free_tokens(char **tokens)
+{
+	size_t i;
+	
+	for (i = 0; tokens[i] != NULL; i++)
+		free(tokens[i]);
+
+	free(tokens);
+}
 
 
 /**
- * split_args - function that splits the supplied arguments into a string
- * @tokens: pointer to buffer of arguments
- * @str: the string to be parsed
- * @delimeter: tipe of delimeter
- * Return: void
+ * count_args - Count the number of arguments a string have
+ * by it delimiter
+ * @str: String to count arguments
+ * @delimiter: Delimeter to use to count
+ *
+ * Return: Number of arguments of a string
  */
-void split_args(char **tokens, char *str, char *delimeter)
+size_t count_args(const char *str, const char *delimeter)
 {
-	char *token = NULL;
-	size_t i = 0;
+	char *str_copy = NULL, *token = NULL;
+	size_t count = 0;
+
+	str_copy = _strdup(str);
+	if (str_copy == NULL)
+		return (0);
+
+	token = strtok(str_copy, delimeter);
+
+	while(token != NULL)
+	{
+		count++;
+		token = strtok(NULL, delimeter);
+	}
+
+	free(str_copy);
+
+	return (count);
+}
+
+
+/**
+ * split_args - Splits a string in an array of arguments
+ * @str: The string to be parsed
+ * @delimeter: Delimeter to use
+ *
+ * Return: Pointer to an array of arguments
+ */
+char **split_args(char *str, const char *delimeter)
+{
+	char **tokens = NULL, *token = NULL;
+	size_t i = 0, j;
+
+	tokens = _calloc(count_args(str, delimeter) + 1, sizeof(char *));
+	if (!tokens)
+		return (NULL);
 
 	token = strtok(str, delimeter);
 
 	while (token != NULL)
 	{
-		tokens[i++] = token;
+		tokens[i] = malloc(sizeof(char) * _strlen(token) + 1);
+		if (!tokens[i])
+		{
+			for (j = 0; j < i; j++)
+				free(tokens[j]);
+			free(tokens);
+			return (NULL);
+		}
+
+		_strcpy(tokens[i++], token);
 
 		token = strtok(NULL, delimeter);
 	}
 
-	tokens[i] = NULL;
+	return (tokens);
 }
 
 
 /**
- * _getenv - Gets the value of the environment variable name
- * @name: Environment variable to get the value from
+ * filter_cmd - Filters a command in the PATH
+ * @cmd: String to filter in the PATH
  *
- * Return: The value of the environment name or NULL if couldn't find it
+ * Return: 1 if the command were filtered, 
+ * 0 if the command were not filtered,
+ * -1 if an error occured
  */
-char *_getenv(const char *name)
-{
-	extern char **environ;
-	size_t i, j;
-	int is_different = 0;
-
-	for (i = 0; environ[i] != NULL; i++)
-	{
-		for (j = 0; environ[i][j] != '='; j++)
-		{
-			if (name[j] == '\0' || name[j] != environ[i][j])
-			{
-				is_different = 1;
-				break;
-			}
-		}
-		if (!is_different)
-			return (*(environ + i) + j + 1);
-
-		is_different = 0;
-	}
-
-	return (NULL);
-}
-
-
-/**
- * print_env - function that prints the current environment
- * 
- * Return: void
- */
-
-void print_env(void)
-{
-	extern char **environ;
-	size_t i;
-
-	for (i = 0; environ[i] != NULL; i++)
-	{
-		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
-		write(STDOUT_FILENO, "\n", 1);
-	}
-}
-
-
-/**
- * filter_cmd - funtion that filter the command of the PATH
- * @cmd:  string  of the commands imput
- * Return:  NULL
- */
-char *filter_cmd(char *cmd)
+int filter_cmd(char **cmd)
 {
 	char *token = NULL, *p_cmd = NULL, *p_data = _getenv("PATH"), *p_copy = NULL;
-	size_t cmd_len = _strlen(cmd);
+	size_t cmd_full_len, cmd_len = _strlen(*cmd);
 	
-	if ((cmd[0] != '/' && cmd[0] != '.') && p_data == NULL)
-		return (NULL);
-	p_cmd = malloc(sizeof(char) * cmd_len + 1);
-	if (!p_cmd)
-		return (NULL);
-	p_cmd = _strcpy(p_cmd, cmd);
-	if (access(p_cmd, F_OK) == 0)
-		return (p_cmd);
-	free(p_cmd);
-		
-	p_copy = malloc(sizeof(char) * _strlen(p_data) + 1);
+	if ((*cmd[0] != '/' && *cmd[0] != '.') && p_data == NULL)
+		return (0);
+	if (access(*cmd, F_OK) == 0)
+		return (1);
+
+	p_copy = _strdup(p_data);
 	if (!p_copy)
-		return (NULL);
-	p_copy = _strcpy(p_copy, p_data);
+		return (-1);
+
 	token = strtok(p_copy, ":");
 	while (token != NULL)
 	{
-		p_cmd = malloc(sizeof(char) * _strlen(token) + cmd_len + 2);
+		cmd_full_len = _strlen(token) + cmd_len + 1;
+		p_cmd = malloc(sizeof(char) * cmd_full_len + 1);
 		if (!p_cmd)
-			return (NULL);
+			return (-1);
 		_strcpy(p_cmd, token);
 		_strcat(p_cmd, "/");
-		_strcat(p_cmd, cmd);
+		_strcat(p_cmd, *cmd);
 
 		if (access(p_cmd, F_OK) == 0)
 		{
+			free(*cmd);
+			*cmd = p_cmd;
 			free(p_copy);
-			return (p_cmd);
+			return (1);
 		}
 		token = strtok(NULL, ":");
 		free(p_cmd);
 	}
+
 	free(p_copy);
-	return (NULL);
+	return (0);
 }
