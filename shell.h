@@ -32,7 +32,6 @@ size_t count_digits(int num);
 void print_not_found_error(char *cmd, size_t *count_err);
 int filter_cmd(char **cmd);
 void print_env(void);
-void *_realloc(void *ptr, size_t old_size, size_t new_size);
 void *_calloc(size_t nelem, size_t elsize);
 void *_memset(void *s, int c, size_t n);
 
