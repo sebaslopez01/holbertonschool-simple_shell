@@ -6,7 +6,7 @@
  * @s: Memory area
  * @c: Constant byte
  * @n: Count of bytes to fill
- * 
+ *
  * Return: A pointer to the memory area s
  */
 void *_memset(void *s, int c, size_t n)

@@ -25,7 +25,7 @@ void print_not_found_error(char *cmd, size_t *count_err)
 {
 	char *num = NULL, *error_msg = NULL;
 	size_t len;
-	
+
 	num = malloc(sizeof(char) * count_digits(*count_err) + 1);
 	if (!num)
 		return;

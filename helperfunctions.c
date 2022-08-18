@@ -10,7 +10,10 @@
 void free_tokens(char **tokens)
 {
 	size_t i;
-	
+
+	if (tokens == NULL)
+		return;
+
 	for (i = 0; tokens[i] != NULL; i++)
 		free(tokens[i]);
 
@@ -22,7 +25,7 @@ void free_tokens(char **tokens)
  * count_args - Count the number of arguments a string have
  * by it delimiter
  * @str: String to count arguments
- * @delimiter: Delimeter to use to count
+ * @delimeter: Delimeter to use to count
  *
  * Return: Number of arguments of a string
  */
@@ -37,7 +40,7 @@ size_t count_args(const char *str, const char *delimeter)
 
 	token = strtok(str_copy, delimeter);
 
-	while(token != NULL)
+	while (token != NULL)
 	{
 		count++;
 		token = strtok(NULL, delimeter);
@@ -59,9 +62,13 @@ size_t count_args(const char *str, const char *delimeter)
 char **split_args(char *str, const char *delimeter)
 {
 	char **tokens = NULL, *token = NULL;
-	size_t i = 0, j;
+	size_t i = 0, j, count;
 
-	tokens = _calloc(count_args(str, delimeter) + 1, sizeof(char *));
+	count = count_args(str, delimeter);
+	if (count == 0)
+		return (NULL);
+
+	tokens = _calloc(count + 1, sizeof(char *));
 	if (!tokens)
 		return (NULL);
 
@@ -91,7 +98,7 @@ char **split_args(char *str, const char *delimeter)
  * filter_cmd - Filters a command in the PATH
  * @cmd: String to filter in the PATH
  *
- * Return: 1 if the command were filtered, 
+ * Return: 1 if the command were filtered,
  * 0 if the command were not filtered,
  * -1 if an error occured
  */
@@ -99,7 +106,7 @@ int filter_cmd(char **cmd)
 {
 	char *token = NULL, *p_cmd = NULL, *p_data = _getenv("PATH"), *p_copy = NULL;
 	size_t cmd_full_len, cmd_len = _strlen(*cmd);
-	
+
 	if ((*cmd[0] != '/' && *cmd[0] != '.') && p_data == NULL)
 		return (0);
 	if (access(*cmd, F_OK) == 0)

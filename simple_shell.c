@@ -1,22 +1,28 @@
 #include "shell.h"
 
+
 /**
- * main - program that executes command line operations
+ * main - Executes command line operations
+ * @argc: Size of argv
+ * @argv: Array of arguments
  *
  * Return: 0 Success
  */
-
-int main(void)
+int main(int argc, char **argv)
 {
-	pid_t new_process;
-	int status = 0, exit_status = 0;
+	int builtins_res, exit_status = 0;
 	ssize_t readed_bytes;
-	extern char **environ;
 	char *buffer = NULL, *prompt = "#cisfun$ ", **tokens = NULL;
 	size_t bufsize = 0, promptsize = 9, count_err = 1;
 
+	if (argc > 1)
+	{
+		write(STDOUT_FILENO, "This program doesn't receive any arguments", 42);
+		return (0);
+	}
+
 	while (1)
-	{	
+	{
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, prompt, promptsize);
 		readed_bytes = getline(&buffer, &bufsize, stdin);
@@ -24,58 +30,19 @@ int main(void)
 			break;
 		if (*buffer == '\n')
 			continue;
-		if (!_strcmp(buffer, "exit\n"))
-		{
-			free(buffer);
-			exit(exit_status);
-		}
-		if (!_strcmp(buffer, "env\n"))
-		{
-			print_env();
+
+		builtins_res = execute_builtins(buffer, exit_status);
+		if (!builtins_res)
 			continue;
-		}
-		tokens = split_args(buffer, " \t\r\n");
-		if (tokens == NULL || tokens[0] == NULL)
-		{
-			free(tokens);
-			break;
-		}
-		
-		if (!filter_cmd(&tokens[0]))
-		{
-			print_not_found_error(tokens[0], &count_err);
-			if (!isatty(STDIN_FILENO))
-			{
-				free_tokens(tokens);
-				free(buffer);
-				exit(127);
-			}
+
+		tokens = create_tokens(buffer, &count_err);
+		if (tokens == NULL)
 			continue;
-		}
 
-		new_process = fork();
-		if (new_process == EOF)
-		{
-			free_tokens(tokens);
-			free(buffer);
-			return (print_error("New process error"));
-		}
-
-		if (new_process == 0)
-		{
-			execve(tokens[0], tokens, environ);
-
-			free_tokens(tokens);
-			free(buffer);
-			return (print_error("./shell"));
-		}
-		else	
-			wait(&status);
-		free_tokens(tokens);
-
-		if (WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
+		exit_status = create_process(argv[0], buffer, tokens);
 	}
+
 	free(buffer);
+
 	return (0);
 }

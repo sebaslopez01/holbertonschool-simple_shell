@@ -9,7 +9,6 @@
  */
 char *_getenv(const char *name)
 {
-	extern char **environ;
 	size_t i, j;
 	int is_different = 0;
 
@@ -34,14 +33,12 @@ char *_getenv(const char *name)
 
 
 /**
- * print_env - function that prints the current environment
- * 
+ * print_env - Prints the current environment
+ *
  * Return: void
  */
-
 void print_env(void)
 {
-	extern char **environ;
 	size_t i;
 
 	for (i = 0; environ[i] != NULL; i++)

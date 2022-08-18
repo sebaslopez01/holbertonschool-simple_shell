@@ -25,7 +25,6 @@ size_t count_digits(int num)
  * itoa - Fill a buffer of chars with a long int value
  * @num: Number to convert to a string
  * @buffer: Buffer to fill
- * @base: Base to use for the conversion
  *
  * Return: Number converted to string
  */

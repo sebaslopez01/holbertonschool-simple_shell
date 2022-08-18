@@ -13,7 +13,8 @@
 
 /* types and structures */
 
-/* macros valores constantes */
+/* global variables */
+extern char **environ;
 
 /* prototypes */
 int print_error(char *str);
@@ -34,6 +35,9 @@ int filter_cmd(char **cmd);
 void print_env(void);
 void *_calloc(size_t nelem, size_t elsize);
 void *_memset(void *s, int c, size_t n);
+int create_process(char *program_name, char *buffer, char **tokens);
+char **create_tokens(char *buffer, size_t *count_err);
+int execute_builtins(char *buffer, int exit_status);
 
 /* macros functions */
 
