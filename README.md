@@ -58,7 +58,7 @@ If hsh is invoked with standard input not connected to a terminal, it reads and 
 
 This flowchart shows the elaboration process after a whiteboarding session to understand how the simple shell will work.
 
-![flowchart picture](https://ibb.co/m4V2rbX)
+![flowchart picture](https://i.ibb.co/5LgSXGn/flowchart-shell.jpg)
 
 ### Environment
 
