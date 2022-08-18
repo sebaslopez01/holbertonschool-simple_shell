@@ -32,7 +32,29 @@ The purpose of the simple shell project is to understand:
 
 	(your_terminal)$ git clone https://github.com/sebaslopez01/holbertonschool-simple_shell.git
 	(your_terminal)$ cd holbertonschool-simple_shell
-	(your_terminal)$ gcc -Wall -Werror -Wextra -pedantic -Wno-format *.c -o simple_shell
+	(your_terminal)$ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+
+### Invocation
+
+hsh can be invoked both interactively an non-interactively. 
+If hsh is invoked with standard input not connected to a terminal, it reads and executes received commands in order.
+	(your_terminal)$ ./hsh
+	#cisfun$
+
+Interactive mode, example:
+
+	(your_terminal)$ ./hsh
+	#cisfun$ /bin/ls
+	hsh main.c shell.c
+	#cisfun$ 
+	#cisfun$ exit
+	(your_terminal)$ 
+
+Non-interactive mode:
+
+	#cisfun$ echo "/bin/ls" | ./hsh
+	hsh main.c shell.c test_ls_2
+	#cisfun$
 
 ### Environment
 
