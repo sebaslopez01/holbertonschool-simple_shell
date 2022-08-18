@@ -39,7 +39,7 @@ If hsh is invoked with standard input not connected to a terminal, it reads and 
 	(your_terminal)$ ./hsh
 	#cisfun$
 
-Interactive mode, example:
+## Interactive mode, example:
 
 	(your_terminal)$ ./hsh
 	#cisfun$ /bin/ls
@@ -48,11 +48,17 @@ Interactive mode, example:
 	#cisfun$ exit
 	(your_terminal)$ 
 
-Non-interactive mode:
+## Non-interactive mode:
 
 	#cisfun$ echo "/bin/ls" | ./hsh
 	hsh main.c shell.c test_ls_2
 	#cisfun$
+
+### Flowchat
+
+This flowchart shows the elaboration process after a whiteboarding session to understand how the simple shell will work.
+
+![flowchart picture](<iframe width="768" height="432" src="https://miro.com/app/live-embed/uXjVPfuhgyc=/?moveToViewport=-432,-243,1570,2197&embedId=785006385899" frameborder="0" scrolling="no" allowfullscreen></iframe>)
 
 ### Environment
 
