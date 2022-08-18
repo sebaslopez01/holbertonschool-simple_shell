@@ -22,8 +22,6 @@ The purpose of the simple shell project is to understand:
 
 ### Builtins Supported
 
-	cd - change directory
-
 	env - list the current environment variables
 
 	exit - exit the shell
