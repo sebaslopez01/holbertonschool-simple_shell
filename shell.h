@@ -11,8 +11,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-/* types and structures */
-
 /* global variables */
 extern char **environ;
 
@@ -38,7 +36,5 @@ void *_memset(void *s, int c, size_t n);
 int create_process(char *program_name, char *buffer, char **tokens);
 char **create_tokens(char *buffer, size_t *count_err);
 int execute_builtins(char *buffer, int exit_status);
-
-/* macros functions */
 
 #endif
