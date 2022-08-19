@@ -46,26 +46,27 @@ int create_process(char *program_name, char *buffer, char **tokens)
 
 /**
  * create_tokens - Creates an array of arguments
+ * @program_name: Program Name executing
  * @buffer: String readed from the stdin
  * @count_err: Pointer to an error counter
  *
  * Return: Pointer to an array of arguments, or NULL if it failed
  */
-char **create_tokens(char *buffer, size_t *count_err)
+char **create_tokens(char *program_name, char *buffer, size_t *count_err)
 {
 	char **tokens = NULL;
 
 	tokens = split_args(buffer, " \t\r\n");
 	if (tokens == NULL || tokens[0] == NULL)
 	{
-		free(tokens);
-		free(buffer);
-		exit(0);
+		free_tokens(tokens);
+
+		return (NULL);
 	}
 
 	if (!filter_cmd(&tokens[0]))
 	{
-		print_not_found_error(tokens[0], count_err);
+		print_not_found_error(program_name, tokens[0], count_err);
 
 		free_tokens(tokens);
 

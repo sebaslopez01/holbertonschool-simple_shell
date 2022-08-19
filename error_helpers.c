@@ -16,12 +16,13 @@ int print_error(char *str)
 
 /**
  * print_not_found_error - Prints an error if a command is not found
+ * @program_name: Program Name executing
  * @cmd: Name of the command to print
  * @count_err: Number of errors to increment
  *
  * Return: void
  */
-void print_not_found_error(char *cmd, size_t *count_err)
+void print_not_found_error(char *program_name, char *cmd, size_t *count_err)
 {
 	char *num = NULL, *error_msg = NULL;
 	size_t len;
@@ -30,13 +31,14 @@ void print_not_found_error(char *cmd, size_t *count_err)
 	if (!num)
 		return;
 	num = itoa(*count_err, num);
-	len = _strlen(cmd) + _strlen(num) + 21;
+	len = _strlen(cmd) + _strlen(num) + _strlen(program_name) + 16;
 
 	error_msg = malloc(sizeof(char) * len + 1);
 	if (!error_msg)
 		return;
 
-	_strcpy(error_msg, "./hsh: ");
+	_strcpy(error_msg, program_name);
+	_strcat(error_msg, ": ");
 	_strcat(error_msg, num);
 	_strcat(error_msg, ": ");
 	_strcat(error_msg, cmd);

@@ -28,13 +28,13 @@ char *_strdup(const char *str);
 void reverse_string(char *str);
 char *itoa(int num, char *buffer);
 size_t count_digits(int num);
-void print_not_found_error(char *cmd, size_t *count_err);
+void print_not_found_error(char *program_name, char *cmd, size_t *count_err);
 int filter_cmd(char **cmd);
 void print_env(void);
 void *_calloc(size_t nelem, size_t elsize);
 void *_memset(void *s, int c, size_t n);
 int create_process(char *program_name, char *buffer, char **tokens);
-char **create_tokens(char *buffer, size_t *count_err);
+char **create_tokens(char *program_name, char *buffer, size_t *count_err);
 int execute_builtins(char *buffer, int exit_status);
 
 #endif

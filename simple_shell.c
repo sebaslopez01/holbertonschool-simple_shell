@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 		if (!builtins_res)
 			continue;
 
-		tokens = create_tokens(buffer, &count_err);
+		tokens = create_tokens(argv[0], buffer, &count_err);
 		if (tokens == NULL)
 			continue;
 
